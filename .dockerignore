@@ -1,0 +1,14 @@
+# Ignore go test files and artifacts
+*.test
+*.o
+*.out
+vendor/
+
+# Ignore git files
+.git
+.gitignore
+
+# Ignore editor and IDE files
+*.swp
+.vscode/
+.idea/

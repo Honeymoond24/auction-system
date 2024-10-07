@@ -1,0 +1,22 @@
+type: google.api.Service
+config_version: 3
+
+http:
+  rules:
+    - selector: "auction.AuctionService.CreateUser"
+      post: "/v1/users"
+      body: "*"
+    - selector: "auction.AuctionService.CreateLot"
+      post: "/v1/lots"
+      body: "*"
+    - selector: "auction.AuctionService.PlaceBid"
+      post: "/v1/auctions/{auction_id}/bids"
+      body: "*"
+    - selector: "auction.AuctionService.CloseAuction"
+      post: "/v1/auctions/{auction_id}:close"
+      body: "*"
+    - selector: "auction.AuctionService.GetAuctionStatus"
+      get: "/v1/auctions/{auction_id}/status"
+    - selector: "auction.AuctionService.ReplenishBalance"
+      post: "/v1/users/{user_id}/balance:replenish"
+      body: "*"

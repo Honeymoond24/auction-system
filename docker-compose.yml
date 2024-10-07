@@ -1,0 +1,46 @@
+services:
+  auction_api:
+    container_name: "auction_api"
+    build: .
+    env_file:
+      - .env
+    depends_on:
+      - migration
+      - db
+    ports:
+      - "8080:8080"
+      - "50051:50051"
+    logging:
+      driver: json-file
+      options:
+        max-size: "32m"
+        max-file: "3"
+
+  migration:
+    container_name: "auction_migration"
+    image: migrate/migrate
+    env_file:
+      - .env
+    volumes:
+      - ./internal/infrastructure/database/migrations:/migrations
+    depends_on:
+      - db
+    command: ["-path", "/migrations", "-database", "${DATABASE_URI}", "up"]
+
+  db:
+    container_name: "auction_db"
+    image: postgres:16.4-alpine
+    env_file:
+      - .env
+    volumes:
+      - ./.docker_volumes/postgres_data:/var/lib/postgresql/data
+    expose:
+      - 5432
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  postgres_data:
